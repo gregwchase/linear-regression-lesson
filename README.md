@@ -6,9 +6,9 @@ complete the lesson plan.
 
 ## Prerequisites
 
-Download and install [Anaconda](https://www.anaconda.com/download/). For this exercise, you'll want the Python 2.7 version.
+Download and install [Anaconda](https://www.anaconda.com/download/). For this exercise, download the Python 2.7 version.
 
-## Installation Check
+## Installation Setup
 
 ####  Mac/ Linux (Ubuntu)
 
