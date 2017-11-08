@@ -1,43 +1,46 @@
-import matplotlib.pyplot as plt
-import numpy as np
-from sklearn import datasets, linear_model
-from sklearn.metrics import mean_squared_error, r2_score
+from sklearn.metrics import mean_squared_error
+from sklearn import datasets
+from sklearn.datasets import load_boston
+from sklearn.linear_model import LinearRegression
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import r2_score
+import pandas as pd
 
-diabetes = datasets.load_diabetes()
+'''Preprocessing'''
 
-diabetes_X = diabetes.data[:, np.newaxis, 2]
+# Load dataset
+boston = load_boston()
 
-# Split the data into training/testing sets
-diabetes_X_train = diabetes_X[:-20]
-diabetes_X_test = diabetes_X[-20:]
-
-# Split the targets into training/testing sets
-diabetes_y_train = diabetes.target[:-20]
-diabetes_y_test = diabetes.target[-20:]
-
-
-# Create linear regression object
-model = linear_model.LinearRegression()
-
-# Train the model using the training sets
-model.fit(diabetes_X_train, diabetes_y_train)
-
-# Make predictions using the testing set
-diabetes_y_pred = model.predict(diabetes_X_test)
+# Create the target, and convert to Pandas DataFrame
+y = boston.target
+boston = pd.DataFrame(boston.data)
 
 
-# The coefficients
-print('Coefficients: \n', model.coef_)
-# The mean squared error
-print("Mean squared error: %.2f"
-      % mean_squared_error(diabetes_y_test, diabetes_y_pred))
-# Explained variance score: 1 is perfect prediction
-print('R2 score: %.2f' % r2_score(diabetes_y_test, diabetes_y_pred))
+# View the Pandas DataFrame
+print(boston.head())
 
-# Plot outputs
-# plt.scatter(diabetes_X_test, diabetes_y_test,  color='black')
-# plt.plot(diabetes_X_test, diabetes_y_pred, color='blue', linewidth=3)
-#
-# plt.xticks(())
-# plt.yticks(())
-# plt.show()
+
+# Change the column names; print out the DataFrame again
+boston.columns = ['crim', 'zn', 'indus', 'chas', 'nox', 'rm', 'age', 'dis', 'rad', 'tax', 'ptratio', 'black', 'lstat']
+
+print(boston.head())
+
+'''Building The Linear Regression Model'''
+
+# Split the data into test and training data sets
+X_train, X_test, y_train, y_test = train_test_split(boston, y, test_size=0.20, random_state=42)
+
+
+# Create the Linear Regression model
+model = LinearRegression()
+
+model.fit(X_train, y_train)
+
+
+# Predict against the model
+predictions = model.predict(X_test)
+
+
+# Evaluate the model
+print("R2 Score: ", round(r2_score(y_test, predictions),2))
+print("Mean Squared Error: ", round(mean_squared_error(y_test, predictions),2))
